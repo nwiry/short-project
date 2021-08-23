@@ -1,5 +1,13 @@
 
 body {
-    background: rgb(102,0,255);
-    background: linear-gradient(22deg, rgba(102,0,255,1) 0%, rgba(171,0,255,1) 65%);
+    background: rgb(81,69,252);
+background: linear-gradient(90deg, rgba(81,69,252,1) 5%, rgba(153,0,255,1) 85%);
+}
+
+.logo {
+    width: 350px;
+    height: 150px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

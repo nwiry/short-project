@@ -9,6 +9,8 @@
     <title>Guardaê</title>
 </head>
 <body>
-   <img src="assets/img/logo.png">
+    <div class="logo">
+        <img class="logo" src="assets/img/logo2.png">
+    </div>
 </body>
 </html>
