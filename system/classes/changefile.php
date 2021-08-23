@@ -40,7 +40,7 @@ class ChangeFile{
                 "line1" => "\"private\": " . $line_content,
                 "line2" => "\"private\": " . $line_newValue,
                 "line3" => "\"password\": " . $extra_lineValue,
-                "line4" => "\"password\": " . $extra_lineNewValue
+                "line4" => "\"password\": \"" . $extra_lineNewValue . "\""
             ];
         }
         if($line_type == 'clicks'){
@@ -59,7 +59,8 @@ class ChangeFile{
         return $this->content;
     }
 
-    public function ChangeFileContent(string $file, string $fileLine, array $extraData = []){
+    private function ChangeFileContent(string $file, string $fileLine, array $extraData = []){
+        $file = __DIR__ . '/../../links/' . $file . ".txt";
         /**
          * @var object
          */
@@ -88,37 +89,79 @@ class ChangeFile{
                 $linha_n2 = explode($identifyFl['line0a'], $identifyFl['line3']);
                 $linha_n2 = $linha_n2[1];
             }
-            return $linha_n;
-            if ($file) {
+            $filename = fopen($file,'r+');
+            if ($filename) {
                 while(true) {
-                    $linha = fgets($file);
+                    $linha = fgets($filename);
                     if ($linha==null) break;
                     
                     if(preg_match("/$linha_n/", $linha)) {
-                        $newA = "\"clicks\": " . $linha_n;
-                        $newC = "\"clicks\": " . $linha_n + 1;
-                        $string .= str_replace("\"clicks\": " . $linha_n, "\"clicks\": " . ($linha_n + 1), $linha);
+                        if($identifyFl['line0'] == "\"clicks\": "){
+                            $newV = $identifyFl['line0'] . ($linha_n + 1);
+                        }else{
+                            $newV = $identifyFl['line2'];
+                        }
+                        $string .= str_replace($identifyFl['line1'], $newV, $linha);
                     }else{
                         $string .= $linha;
                     }
                 }
-                rewind($file);
+                rewind($filename);
                 // Apaga o conteudo
-                ftruncate($file, 0);
+                ftruncate($filename, 0);
                 
-                if (!fwrite($file, $string)) return [
+                if (!fwrite($filename, $string)) return [
                     "status" => "error",
                     "errorCode" => "", // A Definir
                     "response" => "" // Mensagem de Resposta
                 ];
-                // Adicionar validações para line_n2 aqui ----
+            }else{
                 return [
-                    "status" => "success",
-                    "errorCode" => 0,
+                    "status" => "error",
+                    "errorCode" => "", // A Definir
                     "response" => "" // Mensagem de Resposta
                 ];
-                fclose($file);
             }
+
+            fclose($filename);
+
+            if(isset($identifyFl['line0a'])){
+                $filename = fopen($file,'r+');
+                if ($filename) {
+                    while(true) {
+                        $linha = fgets($filename);
+                        if ($linha==null) break;
+                        if(preg_match("/$linha_n/", $linha)) {
+                            $newstring .= str_replace($identifyFl['line3'], $identifyFl['line4'], $linha);
+                        }else{
+                            $newstring .= $linha;
+                        }
+                    }
+                    rewind($filename);
+                    // Apaga o conteudo
+                    ftruncate($filename, 0);
+
+                    if (!fwrite($filename, $newstring)) return [
+                        "status" => "error",
+                        "errorCode" => "", // A Definir
+                        "response" => "" // Mensagem de Resposta
+                    ];
+                }else{
+                    return [
+                        "status" => "error",
+                        "errorCode" => "", // A Definir
+                        "response" => "" // Mensagem de Resposta
+                    ];
+                }
+                fclose($filename);
+            }
+
+            return [
+                "status" => "success",
+                "errorCode" => 0,
+                "response" => "" // Mensagem de Resposta
+            ];
+
         }else{
             return false;
         }
