@@ -3,6 +3,6 @@
 "link": "https://www.google.com.br/", 
 "user": 0, 
 "private": 0, 
-"password": null, 
+"password": 0, 
 "clicks": 0
 }
