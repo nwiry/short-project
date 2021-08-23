@@ -6,6 +6,12 @@
  * @author   Allen Chou <s3131212@gmail.com>
  * @access   public
  * @see      https://github.com/s3131212/Simple-PHP-Router/
+ *
+ * @method local
+ */
+namespace Router;
+/**
+ * @method class Router
  */
 Class Router{
 	private $url = '';
