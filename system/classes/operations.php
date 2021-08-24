@@ -43,7 +43,18 @@ class Operations extends ChangeFile{
         return false;
     }
 
+    private function content_link($file){
+        if($this->link_exist($file)){
+            return json_decode(file_get_contents($this->dirLinks . $file . $this->extLinks));
+        }
+        return false;
+    }
+
     public function exist_result($link){
         return $this->link_exist($link);
+    }
+
+    public function objects_content($file){
+        return $this->content_link($file);
     }
 }
