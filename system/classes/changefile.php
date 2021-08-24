@@ -4,7 +4,7 @@
  */
 namespace Short\ShortProject\ChangeFile;
 /**
- * @method class Router
+ * @method class ChangeFile
  */
 class ChangeFile{
     /**
