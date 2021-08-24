@@ -20,4 +20,7 @@ if($verificaLink->exist_result($endpoint)){
     }else{
         // Verificar tipo de proteção e tratar dados
     }
+}else{
+    // Link não existente
+    die(include_once(__DIR__ . '/../../layout/errors/404.html'));
 }
