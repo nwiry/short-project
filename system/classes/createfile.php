@@ -39,4 +39,18 @@ class CreateFile extends ChangeFile{
         $this->extLinks = parent::extShorts;
     }
     
+    /**
+     * @return bool - Verifica se o arquivo existe, retornando verdadeiro ou falso
+     */
+    private function link_exist(string $link){
+        // Fixa o arquivo
+        $filename = $this->dirLinks . $link . $this->extLinks;
+        /**
+         * Verifica se o arquivo existe ou não
+         */
+        if(file_exists($filename)){
+            return true;
+        }
+        return false;
+    }
 }
