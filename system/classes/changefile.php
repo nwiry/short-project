@@ -224,4 +224,56 @@ class ChangeFile{
             }
         }
     }
+
+    public function updateSecurity(string $short_file, array $file_content){
+        /**
+         * @param mixed
+         */
+        $upResponse = $this->ChangeFileContent($short_file, "private", $file_content);
+        if(!is_bool($upResponse)){
+            // Verifica condições
+            return $upResponse['status'] == "success" ? 
+            /**
+             * @return array
+             */
+            $upResponse : $upResponse ;
+        }else{
+            if(!$upResponse){
+                /**
+                 * @return array
+                 */
+                return [
+                    "status" => "error",
+                    "errorCode" => "", // A Definir
+                    "response" => "" // Mensagem de Resposta
+                ];
+            }
+        }
+    }
+
+    public function updateClick(string $short_file, array $file_content){
+        /**
+         * @param mixed
+         */
+        $upResponse = $this->ChangeFileContent($short_file, "clicks", $file_content);
+        if(!is_bool($upResponse)){
+            // Verifica condições
+            return $upResponse['status'] == "success" ? 
+            /**
+             * @return array
+             */
+            $upResponse : $upResponse ;
+        }else{
+            if(!$upResponse){
+                /**
+                 * @return array
+                 */
+                return [
+                    "status" => "error",
+                    "errorCode" => "", // A Definir
+                    "response" => "" // Mensagem de Resposta
+                ];
+            }
+        }
+    }
 }
