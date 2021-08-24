@@ -2,7 +2,7 @@
 /**
  * @method local
  */
-namespace Short\ChangeFile;
+namespace Short\ShortProject\ChangeFile;
 /**
  * @method class Router
  */

@@ -9,7 +9,7 @@
  *
  * @method local
  */
-namespace Router;
+namespace Short\ShortProject\Router;
 /**
  * @method class Router
  */
