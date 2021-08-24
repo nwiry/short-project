@@ -14,7 +14,7 @@ require_once('./vendor/autoload.php');
 /**
  * @package export
  */
-use Router\Router;
+use Short\ShortProject\Router\Router;
 /**
  * @global object Router
  */
