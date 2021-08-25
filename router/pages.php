@@ -12,6 +12,13 @@ if($_SERVER['REQUEST_METHOD'] == $_SERVER['REQUEST_METHOD'] && realpath(__FILE__
  */
 $router = $GLOBALS['Router'];
 /**
+ * @method - API's
+ */
+$router->all('/api/short/url', function(){
+    // Importar a API Short URL
+    include_once(__DIR__ . '/../system/apis/shorturl.php');
+});
+/**
  * @method - Verificação das urls setadas
  */
 $router->all('/{var1}/info', function($var1){
