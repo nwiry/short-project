@@ -6,7 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/main.css">
+    <link rel="stylesheet" href="assets/error.css">
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/index.js"></script>
+
     <title>Guardaê</title>
 </head>
 <body>
@@ -26,19 +30,26 @@
         <h3>Nosso tempo de resposta nos clicks são mais rápidos e precisos em relação a outros encurtadores</h3>
       </div>
       
-      <a href="#">Experimente</a>
+      <a id="button" href="#text">Experimente</a>
     </div>
     
   </div>
 
 </div>
-    <div class="textCenter">
+    <div id="text" class="textCenter">
         <h1>Começe a usar agora mesmo</h1>
     </div>
 
 <div class="inputCenter">
-<input class="input input-gradient" type="text" placeholder="Digite seu link"/>
+<input class="input input-gradient text" placeholder="Cole seu link aqui" type="text" />
 </div>
+
+<div class="btnEncurtar">
+<a href="#">Encurtar</a>
+</div>
+
+<br>
+<br>
 
 
 
