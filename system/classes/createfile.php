@@ -156,4 +156,8 @@ $content = '{
         ];
         
     }
+
+    public function returndata(string $shorturl, array $data){
+        return $this->create_file($shorturl, $data);
+    }
 }
