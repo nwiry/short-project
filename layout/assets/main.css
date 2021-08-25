@@ -4,6 +4,7 @@
 *{
   font-family: 'Poppins', sans-serif;
 }
+
 body{
     
   justify-content: center;
@@ -17,6 +18,7 @@ h1{
 }
 
 .textCenter{
+    margin-top: 20px;
     text-align: center;
 }
 
@@ -28,8 +30,10 @@ h1{
 
 
 .container{
-    margin-left: 150px;
-  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center
 }
 
 .container .card{
@@ -211,25 +215,57 @@ h1{
 }
 
 .inputCenter{
-    display: block;
-    margin-left: auto;
-    margin-right: auto
+  
+height: 20vh;
+    display: flex;
+    flex-direction: row;
+justify-content: center;
+align-items: center
+  
 }
 
 .input {
     height: 35px;
     margin-bottom: 15px;
     padding-left: 600px;
-    padding-right: 35px;
-    
+    width: 90%;
+    padding: 1.5rem 2rem;
     color: #1abc9c;
-    
     border-radius: 4px;
     border: 2px solid #fff;
     background-color: transparent;
-  }
+}
 
 .input-gradient {
     border-color: #fff; /* fallback */
     border-image: linear-gradient(-45deg, #7c0efa, #55e900) 1
-  }
+}
+
+
+
+.btnEncurtar{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center
+}
+
+.btnEncurtar a {
+    font-family: 'Montserrat', sans-serif;
+    display: inline-block;
+    text-transform: uppercase;
+    color: #9bdc28;
+    text-decoration: none;
+    border: 2px solid;
+    background: transparent;
+    padding: 10px 40px;
+    font-size: 14px;
+    font-weight: 700;
+    -webkit-transition: 0.2s all;
+    transition: 0.2s all;
+}
+
+.btnEncurtar a:hover {
+    color: #7c0efa;
+}
+
