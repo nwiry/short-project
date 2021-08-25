@@ -94,8 +94,8 @@ class CreateFile extends ChangeFile{
                  */
                 return [
                     "status" => "error",
-                    "errorCode" => "", // A definir
-                    "response" => "" // A Definir
+                    "errorCode" => -20, // Custom Short ja esta sendo utilizado
+                    "response" => "O custom escolhido já está em uso. Tente novamente!" // Mensagem de Resposta
                 ];
             }
         }
@@ -129,8 +129,8 @@ $content = '{
              */
             return [
                 "status" => "error",
-                "errorCode" => "", // A Definir
-                "response" => "" // Mensagem de Resposta
+                "errorCode" => -10, // Falha ao criar arquivo
+                "response" => "Ocorreu um erro ao tentar encurtar a sua URL. Tente novamente dentro de alguns minutos!" // Mensagem de Resposta
             ];
         }
         fclose($fp);
@@ -141,8 +141,8 @@ $content = '{
              */
             return [
                 "status" => "error",
-                "errorCode" => "", // A Definir
-                "response" => "" // Mensagem de Resposta
+                "errorCode" => -25, // Erro ao alterar permissões de arquivo
+                "response" => "chmod don't run in " . $filename // Mensagem de Resposta
             ];
         }
         /**
@@ -151,8 +151,9 @@ $content = '{
         return [
             "status" => "success",
             "errorCode" => 0,
-            "response" => "", // Mensagem de Resposta
-            "perm" => substr(sprintf('%o', fileperms($filename)), -4)
+            "response" => "Link encurtado com sucesso! Clique em OK para ver mais detalhes.", // Mensagem de Resposta
+            "perm" => substr(sprintf('%o', fileperms($filename)), -4),
+            "file" => $short
         ];
         
     }

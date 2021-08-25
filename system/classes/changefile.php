@@ -126,8 +126,8 @@ class ChangeFile{
                  */
                 return [
                     "status" => "error",
-                    "errorCode" => "", // A Definir
-                    "response" => "" // Mensagem de Resposta
+                    "errorCode" => -14, // Falha ao atualizar valor em arquivo
+                    "response" => null // Manipular valor
                 ];
             }else{
                 /**
@@ -135,8 +135,8 @@ class ChangeFile{
                  */
                 return [
                     "status" => "error",
-                    "errorCode" => "", // A Definir
-                    "response" => "" // Mensagem de Resposta
+                    "errorCode" => -10, // Falha ao abrir arquivo
+                    "response" => "Falha ao abrir arquivo" // Mensagem de Resposta
                 ];
             }
             // Fecha o arquivo após processos
@@ -166,8 +166,8 @@ class ChangeFile{
                      */
                     return [
                         "status" => "error",
-                        "errorCode" => "", // A Definir
-                        "response" => "" // Mensagem de Resposta
+                        "errorCode" => -14, // Falha ao atualizar valor em arquivo
+                        "response" => null // Manipular valor
                     ];
                 }else{
                     /**
@@ -175,8 +175,8 @@ class ChangeFile{
                     */
                     return [
                         "status" => "error",
-                        "errorCode" => "", // A Definir
-                        "response" => "" // Mensagem de Resposta
+                        "errorCode" => -10, // Falha ao abrir arquivo
+                        "response" => "Falha ao abrir arquivo" // Mensagem de Resposta
                     ];
                 }
                 // Fecha o arquivo após processos
@@ -188,7 +188,7 @@ class ChangeFile{
             return [
                 "status" => "success",
                 "errorCode" => 0,
-                "response" => "" // Mensagem de Resposta
+                "response" => null // Manipular valor
             ];
 
         }else{
@@ -218,8 +218,8 @@ class ChangeFile{
                  */
                 return [
                     "status" => "error",
-                    "errorCode" => "", // A Definir
-                    "response" => "" // Mensagem de Resposta
+                    "errorCode" => null, // Erro ao realizar processo
+                    "response" => null // Valor multiplo, manipular resposta
                 ];
             }
         }
@@ -244,8 +244,8 @@ class ChangeFile{
                  */
                 return [
                     "status" => "error",
-                    "errorCode" => "", // A Definir
-                    "response" => "" // Mensagem de Resposta
+                    "errorCode" => null, // Erro ao realizar processo
+                    "response" => null // Valor multiplo, manipular resposta
                 ];
             }
         }
@@ -270,8 +270,8 @@ class ChangeFile{
                  */
                 return [
                     "status" => "error",
-                    "errorCode" => "", // A Definir
-                    "response" => "" // Mensagem de Resposta
+                    "errorCode" => -13, // A Definir
+                    "response" => "Falha ao atualizar número de cliques" // Mensagem de Resposta
                 ];
             }
         }
