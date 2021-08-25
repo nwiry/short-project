@@ -38,3 +38,20 @@ O cron do sistema garante a segurança dos links encurtados. Alguns servidores w
 ```sh
 */5 * * * * php -q {dirshort}/cronjobs/folders.php
 ```
+
+## Erros
+
+O sistema irá ignorar todos os avisos não críticos e tentar concluir todas as operações solicitadas em sua configuração padrão. Se a condição de erro for grave e continuar a executar a operação solicitada, sendo prejudicial ou impossível, o sistema exibirá uma mensagem de erro amigável. Isso é consistente com o comportamento da maioria dos sites de produção voltados para o público.
+
+| Código de Erro | Tipo | Classificação | Descrição |
+| ------ | ------ | ------ | ------ |
+| -25 | error | normal | Erro ao alterar permissões de arquivo |
+| -20 | error | normal | Custom Short ja esta sendo utilizado |
+| -15 | error | normal | Falha ao escrever em arquivo |
+| -14 | error | normal | Falha ao atualizar valor em arquivo |
+| -13 | error | normal | Falha ao atualizar número de cliques |
+| -12 | error | normal | Falha ao alterar/definir senha |
+| -11 | error | normal | Falha ao alterar privacidade |
+| -10 | error | normal | Falha ao abrir/criar arquivo |
+| null | warning | global | Erro ao realizar processo |
+| 0 | success | global | Processo concluido com sucesso |
