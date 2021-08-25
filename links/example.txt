@@ -1,8 +1,8 @@
 {
-"short": "a1s2", 
+"short": "example", 
 "link": "https://www.google.com.br/", 
 "user": 0, 
 "private": 0, 
 "password": 0, 
-"clicks": 0
+"clicks": 1
 }
