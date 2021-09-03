@@ -1,8 +1,0 @@
-{
-"short": "example", 
-"link": "https://example.com/", 
-"user": 0, 
-"private": 0, 
-"password": 0, 
-"clicks": 0
-}
