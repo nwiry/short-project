@@ -13,31 +13,24 @@ class Operations extends ChangeFile{
     /**
      * @param string
      */
-    private $dirLinks;
-    /**
-     * @param string
-     */
-    private $extLinks;
+    private $fully;
 
     /** ---- Construtor --- */
     public function __construct(){
         /**
          * @return string
          */
-        $this->dirLinks = parent::dirShorts;
-        /**
-         * @return string
-         */
-        $this->extLinks = parent::extShorts;
+        $this->fully = parent::pathLinks;
     }
 
     private function link_exist($link){
         // Fixa o arquivo
-        $filename = $this->dirLinks . $link . $this->extLinks;
+        $filename = $this->fully;
+        $filename = json_decode(file_get_contents($filename), true);
         /**
-         * Verifica se o arquivo existe ou não
+         * Verifica se o link existe ou não
          */
-        if(file_exists($filename)){
+        if(array_key_exists($link, $filename)){
             return true;
         }
         return false;
@@ -45,7 +38,7 @@ class Operations extends ChangeFile{
 
     private function content_link($file){
         if($this->link_exist($file)){
-            return json_decode(file_get_contents($this->dirLinks . $file . $this->extLinks));
+            return json_decode(file_get_contents($this->fully), true);
         }
         return false;
     }
@@ -54,7 +47,7 @@ class Operations extends ChangeFile{
         return $this->link_exist($link);
     }
 
-    public function objects_content($file){
+    public function array_content($file){
         return $this->content_link($file);
     }
 }
