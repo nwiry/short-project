@@ -14,28 +14,40 @@ class ChangeFile{
     /**
      * @var string - Diretório de links encurtados
      */
-    const dirShorts = __DIR__ . '/../../links/';
+    const pathLinks = __DIR__ . '/../../links/links.json';
     /**
-     * @var string - Extensão dos arquivos
+     * @var object||array - Vai retornar os dados da JSON
      */
-    const extShorts = '.txt';
+    private $linkObject;
+    private $linkArray;
+    /**
+     * @var bool - Vai definir o tipo de consulta
+     */
+    private $json_type = null;
 
-    private function FileLine(string $line_type, string $line_content, string $line_newValue, $extra_lineValue = '', $extra_lineNewValue = ''){
+    public function __construct(){
+        // Retorna os dados
+        $this->linkObject = json_decode(file_get_contents($this::pathLinks));
+        $this->linkArray = json_decode(file_get_contents($this::pathLinks), true);
+    }
+
+    private function FileLine(string $line_type, string $fileUrl, $line_newValue = '', $extra_lineValue = '', $extra_lineNewValue = ''){
         /**
          * @var bool
          */
         $this->content = null;
+        // Define o conteúdo completo
+        $full = "\"" . $fileUrl . ":{\"link\":\"" . $this->linkArray[$fileUrl]["link"] . "\",\"user\":" . $this->linkArray[$fileUrl]["user"] . ",\"private\":" . $this->linkArray[$fileUrl]["private"] . ",\"password\":" . $this->linkArray[$fileUrl]["password"] . ",\"clicks\":" . $this->linkArray[$fileUrl]["clicks"];
         /**
          * @method - Definir Linhas
          */
-        if($line_type == 'short' || $line_type == 'link'){
+        if($line_type == 'link'){
             /**
              * @var array
              */
             $this->content = [
-                "line0" => "\"" . $line_type . "\": ",
-                "line1" => "\"" . $line_type . "\": " . $line_content,
-                "line2" => "\"" . $line_type . "\": " . $line_newValue
+                "line0" => $line_type,
+                "line1" => $line_newValue
             ];
         }
         if($line_type == 'private'){
@@ -43,12 +55,10 @@ class ChangeFile{
              * @var array
              */
             $this->content = [
-                "line0" => "\"private\": ",
-                "line0a" => "\"password\": ",
-                "line1" => "\"private\": " . $line_content,
-                "line2" => "\"private\": " . $line_newValue,
-                "line3" => "\"password\": " . $extra_lineValue,
-                "line4" => "\"password\": \"" . $extra_lineNewValue . "\""
+                "line0" => $line_type,
+                "line1" => $line_newValue,
+                "line2" => $extra_lineValue,
+                "line3" => $extra_lineNewValue
             ];
         }
         if($line_type == 'clicks'){
@@ -56,9 +66,7 @@ class ChangeFile{
              * @var array
              */
             $this->content = [
-                "line0" => "\"clicks\": ",
-                "line1" => "\"clicks\": "  . $line_content,
-                "line2" => "\"clicks\": "  . ($line_newValue + 1)
+                "line0" => $line_type
             ];
         }
         /**
@@ -67,102 +75,98 @@ class ChangeFile{
         return $this->content;
     }
 
-    private function ChangeFileContent(string $file, string $fileLine, array $extraData = []){
-        $file = $this::dirShorts . $file . $this::extShorts;
-        /**
-         * @var object
-         */
-        $jsonFile = json_decode(file_get_contents($file), true);
-        /**
-         * @method - Validar tipo de checagem
-         */
-        if(!isset($extraData['privacyChange'])){
+    private function ChangeFileContent(string $file, string $fileLine, array $extraData = [], string $typeChange = 'content'){
+        if($typeChange == 'content'):
             /**
-             * @return mixed
-             */
-            $identifyFl = $this->FileLine($fileLine, $jsonFile[$fileLine], $extraData['newValue']);
-        }else{
-            /**
-             * @return mixed
-             */
-            $identifyFl = $this->FileLine($fileLine, $jsonFile[$fileLine], $extraData['newValue'], $extraData['passwordAtual'], $extraData['newPassword']);
-        }
-        if(!is_bool($identifyFl)){
-            /**
-             * @var mixed
-             */
-            $linha_n = explode($identifyFl['line0'], $identifyFl['line1']);
-            $linha_n = $linha_n[1];
-            // Verifica se existe o campo password
-            if(isset($identifyFl['line0a'])){
-                $linha_n2 = explode($identifyFl['line0a'], $identifyFl['line3']);
-                $linha_n2 = $linha_n2[1];
-            }
-            // Abre o arquivo para leitura
-            $filename = fopen($file,'r+');
-            if ($filename) {
-                while(true) {
-                    $linha = fgets($filename);
-                    if ($linha==null) break;
-                    // Verifica se o valor informado corresponde ao inserido no arquivo
-                    if(preg_match("/$linha_n/", $linha)) {
-                        if($identifyFl['line0'] == "\"clicks\": "){
-                            $newV = $identifyFl['line0'] . ($linha_n + 1);
-                        }else{
-                            $newV = $identifyFl['line2'];
-                        }
-                        $string .= str_replace($identifyFl['line1'], $newV, $linha);
-                    }else{
-                        $string .= $linha;
-                    }
-                }
-                rewind($filename);
-                // Apaga o conteudo
-                ftruncate($filename, 0);
-                
-                if (!fwrite($filename, $string)) 
+            * @method - Validar tipo de checagem
+            */
+            if(!isset($extraData['privacyChange'])){
                 /**
-                 * @return array - Error
+                 * @return mixed
                  */
-                return [
-                    "status" => "error",
-                    "errorCode" => -14, // Falha ao atualizar valor em arquivo
-                    "response" => null // Manipular valor
-                ];
+                $identifyFl = $this->FileLine($fileLine, $file, $extraData['newValue']);
             }else{
                 /**
-                 * @return array - Error
+                 * @return mixed
                  */
-                return [
-                    "status" => "error",
-                    "errorCode" => -10, // Falha ao abrir arquivo
-                    "response" => "Falha ao abrir arquivo" // Mensagem de Resposta
-                ];
+                $identifyFl = $this->FileLine($fileLine, $file, $extraData['newValue'], $extraData['passwordAtual'], $extraData['newPassword']);
             }
-            // Fecha o arquivo após processos
-            fclose($filename);
-            // Verifica se existe o campo password
-            if(isset($identifyFl['line0a'])){
-                // Abre o arquivo para leitura
-                $filename = fopen($file,'r+');
+            if(!is_bool($identifyFl)){
+                // Lê o arquivo
+                $filename = file_get_contents($this::pathLinks);
                 if ($filename) {
-                    while(true) {
-                        $linha = fgets($filename);
-                        if ($linha==null) break;
-                        // Verifica se a senha informada é igual à escrita no arquivo
-                        if(preg_match("/$linha_n2/", $linha)) {
-                            $newstring .= str_replace($identifyFl['line3'], $identifyFl['line4'], $linha);
-                        }else{
-                            $newstring .= $linha;
+                    $data = $this->linkArray;
+                    if($identifyFl["line0"] == 'link'){
+                        foreach ($data as $key => $entry) {
+                            if($key == $file){
+                                $data[$key]["link"] = $identifyFl["line1"];
+                            }
                         }
                     }
-                    rewind($filename);
-                    // Apaga o conteudo
-                    ftruncate($filename, 0);
+                    if($identifyFl["line0"] == 'private'){
+                        // Verifica o tipo de mudança de privacidade do link
+                        if($identifyFl["line1"]){ // O usuario esta alterando o link para privado ou alterando a senha
+                            // Verifica se ja existe alguma senha definida
+                            if(!$data[$file]["password"]){
+                                foreach ($data as $key => $entry) {
+                                    if($key == $file){
+                                        $data[$key]["private"] = 1;
+                                        $data[$key]["password"] = $identifyFl["line3"];
+                                    }
+                                }
+                            }else{ // O usuario precisa confirmar a senha informada
+                                if($identifyFl["line2"] == $data[$file]["password"]){
+                                    foreach ($data as $key => $entry) {
+                                        if($key == $file){
+                                            $data[$key]["private"] = 1;
+                                            $data[$key]["password"] = $identifyFl["line3"];
+                                        }
+                                    }
+                                }else{
+                                    /**
+                                     * @return array - A senha informada não confere
+                                     */
+                                    return [
+                                        "status" => "error",
+                                        "errorCode" => -12, // Falha ao atualizar valor em arquivo
+                                        "response" => "A senha informada não corresponde a senha cadastrada no sistema!" // Mensagem de Resposta
+                                    ];
+                                }
+                            }
+                        }else{ // O usuario esta retirando a privacidade do link
+                            // O usuario precisa confirmar a senha informada
+                            if($identifyFl["line2"] == $data[$file]["password"]){
+                                foreach ($data as $key => $entry) {
+                                    if($key == $file){
+                                        $data[$key]["private"] = 0;
+                                        $data[$key]["password"] = 0;
+                                    }
+                                }
+                            }else{
+                                /**
+                                 * @return array - A senha informada não confere
+                                 */
+                                return [
+                                    "status" => "error",
+                                    "errorCode" => -12, // Falha ao atualizar valor em arquivo
+                                    "response" => "A senha informada não corresponde a senha cadastrada no sistema!" // Mensagem de Resposta
+                                ];
+                            }
+                        }
+                    }
+                    if($identifyFl["line0"] == 'clicks'){
+                        foreach ($data as $key => $entry) {
+                            if($key == $file){
+                                $data[$key]["clicks"] = $data[$key]["clicks"] + 1;
+                            }
+                        }
+                    }
 
-                    if (!fwrite($filename, $newstring)) 
+                    $newData = json_encode($data);
+                    
+                    if (!file_put_contents($this::pathLinks, $newData)) 
                     /**
-                     * @return array - Error
+                     * @return array - Não foi possiel atualizar valores no arquivo JSON
                      */
                     return [
                         "status" => "error",
@@ -171,32 +175,31 @@ class ChangeFile{
                     ];
                 }else{
                     /**
-                    * @return array - Error
-                    */
+                     * @return array - Não foi possivel abrir o arquivo
+                     */
                     return [
                         "status" => "error",
                         "errorCode" => -10, // Falha ao abrir arquivo
                         "response" => "Falha ao abrir arquivo" // Mensagem de Resposta
                     ];
                 }
-                // Fecha o arquivo após processos
-                fclose($filename);
+                /**
+                 * @return array - Success
+                 */
+                return [
+                    "status" => "success",
+                    "errorCode" => 0,
+                    "response" => null // Manipular valor
+                ];
+    
+            }else{
+                /**
+                 * @return bool - Valores inválidos
+                 */
+                return false;
             }
-            /**
-             * @return array - Success
-             */
-            return [
-                "status" => "success",
-                "errorCode" => 0,
-                "response" => null // Manipular valor
-            ];
-
-        }else{
-            /**
-             * @return bool - Valores inválidos
-             */
-            return false;
-        }
+        endif;
+        // Adicionar funções para criação de URLs aqui
     }
 
     public function updateLink(string $short_file, string $tipo_link, array $file_content){
