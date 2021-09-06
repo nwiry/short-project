@@ -199,7 +199,42 @@ class ChangeFile{
                 return false;
             }
         endif;
-        // Adicionar funções para criação de URLs aqui
+        if($typeChange == 'newurl'):
+            // Dados da nova URL a ser adicionada ao arquivo JSON
+            $dataShort = [
+                $extraData["short"] => [
+                    "link" => $file,
+                    "user" => $extraData["shortUser"],
+                    "private" => $extraData["shortPrivacy"],
+                    "password" => $extraData["shortPass"],
+                    "clicks" => isset($extraData["shortClicks"]) ? $extraData["shortClicks"] : 0
+                ]
+            ];
+            // Adicionando os dados do novo link encurtado ao JSON de links atuais
+            $mergeArrays = array_merge($this->linkArray, $dataShort);
+            // Codificando para JSON
+            $encodeArrays = json_encode($mergeArrays);
+            // Edite o arquivo JSON com os novos dados
+            if(file_put_contents($this::pathLinks, $encodeArrays)){
+                /**
+                 * @return array - Retorna os dados para manuseio
+                 */
+                return [
+                    "status" => "success",
+                    "short" => $extraData['short'],
+                    "errorCode" => 0,
+                    "response" => "URL encurtada com sucesso!"
+                ];
+            }else{
+                return [
+                    "status" => "error",
+                    "errorCode" => -14, // Falha ao atualizar valor em arquivo
+                    "response" => null // Manipular valor
+                ];
+            }
+        endif;
+        // Parametros invalidos, retorne falso
+        return 0;
     }
 
     public function updateLink(string $short_file, string $tipo_link, array $file_content){
@@ -273,8 +308,34 @@ class ChangeFile{
                  */
                 return [
                     "status" => "error",
-                    "errorCode" => -13, // A Definir
+                    "errorCode" => -14,
                     "response" => "Falha ao atualizar número de cliques" // Mensagem de Resposta
+                ];
+            }
+        }
+    }
+
+    public function returndata(string $shortlink, array $datashort){
+        /**
+         * @param mixed
+         */
+        $upResponse = $this->ChangeFileContent($shortlink, "", $datashort, "newurl");
+        if(!is_bool($upResponse)){
+            // Verifica condições
+            return $upResponse['status'] == "success" ? 
+            /**
+             * @return array
+             */
+            $upResponse : $upResponse ;
+        }else{
+            if(!$upResponse){
+                /**
+                 * @return array
+                 */
+                return [
+                    "status" => "warning",
+                    "errorCode" => -14,
+                    "response" => "Falha ao processar a sua solicitação! Tente novamente mais tarde." // Mensagem de Resposta
                 ];
             }
         }

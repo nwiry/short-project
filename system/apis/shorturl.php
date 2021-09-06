@@ -12,7 +12,7 @@ if(isset($_POST['shorturl'])){
      * @var object||self&&mixed - Importação de classes
      */
     $shortResponse = new Short\ShortProject\Validations\Validations();
-    $newFile = new Short\ShortProject\CreateFile\CreateFile();
+    $newFile = new Short\ShortProject\ChangeFile\ChangeFile();
     // Validar resultados
     $shortResponse = $shortResponse->short_url($shorturl, $customshort);
     /**
