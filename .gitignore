@@ -2,3 +2,7 @@
 
 /vendor*
 *.lock*
+
+# Testes locais
+
+local.php
