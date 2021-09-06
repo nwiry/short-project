@@ -7,14 +7,17 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 /**
  * @var object
  */
-$paths = new Short\ShortProject\ChangeFile\ChangeFile;
+$paths = new Short\ShortProject\ChangeFile\ChangeFile();
 /**
  * @var bool
  */
 $localDebug = false;
 
+$nFd = explode("/links.json", $paths::pathLinks);
+$nFd = $nFd[0];
+
 // Requisita a alteração da permissão da pasta de links:
-if(chmod($paths::dirShorts, 0760)){
+if(chmod($paths::pathLinks, 0760) && chmod($nFd, 0760)){
     $cdata = [];
 }else{
     $localDebug ? $cdata = [
