@@ -1,8 +1,9 @@
 <?php
+
 /**
  * @method - Receber POST
  */
-if(isset($_POST['shorturl'])){
+if (isset($_POST['shorturl'])) {
     /**
      * @var string||mixed
      */
@@ -18,16 +19,16 @@ if(isset($_POST['shorturl'])){
     /**
      * @method - Concluir validações
      */
-    if($shortResponse['status'] == 'success'){
+    if ($shortResponse['status'] == 'success') {
         // Requisitar a resposta
         $rNf = $newFile->returndata($shorturl, $shortResponse);
         // Exibir a resposta na API
         echo json_encode($rNf);
-    }else{
+    } else {
         // Exibir erros
         echo json_encode($shortResponse);
     }
-}else{
+} else {
     // Não há requisição na API
     echo json_encode([
         "status" => "error"

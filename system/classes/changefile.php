@@ -1,12 +1,16 @@
 <?php
+
 /**
  * @method local
  */
+
 namespace Short\ShortProject\ChangeFile;
+
 /**
  * @method class ChangeFile
  */
-class ChangeFile{
+class ChangeFile
+{
     /**
      * @var mixed
      */
@@ -25,13 +29,15 @@ class ChangeFile{
      */
     private $json_type = null;
 
-    public function __construct(){
+    public function __construct()
+    {
         // Retorna os dados
         $this->linkObject = json_decode(file_get_contents($this::pathLinks));
         $this->linkArray = json_decode(file_get_contents($this::pathLinks), true);
     }
 
-    private function FileLine(string $line_type, string $fileUrl, $line_newValue = '', $extra_lineValue = '', $extra_lineNewValue = ''){
+    private function FileLine(string $line_type, string $fileUrl, $line_newValue = '', $extra_lineValue = '', $extra_lineNewValue = '')
+    {
         /**
          * @var bool
          */
@@ -41,7 +47,7 @@ class ChangeFile{
         /**
          * @method - Definir Linhas
          */
-        if($line_type == 'link'){
+        if ($line_type == 'link') {
             /**
              * @var array
              */
@@ -50,7 +56,7 @@ class ChangeFile{
                 "line1" => $line_newValue
             ];
         }
-        if($line_type == 'private'){
+        if ($line_type == 'private') {
             /**
              * @var array
              */
@@ -61,7 +67,7 @@ class ChangeFile{
                 "line3" => $extra_lineNewValue
             ];
         }
-        if($line_type == 'clicks'){
+        if ($line_type == 'clicks') {
             /**
              * @var array
              */
@@ -75,54 +81,55 @@ class ChangeFile{
         return $this->content;
     }
 
-    private function ChangeFileContent(string $file, string $fileLine, array $extraData = [], string $typeChange = 'content'){
-        if($typeChange == 'content'):
+    private function ChangeFileContent(string $file, string $fileLine, array $extraData = [], string $typeChange = 'content')
+    {
+        if ($typeChange == 'content') :
             /**
-            * @method - Validar tipo de checagem
-            */
-            if(!isset($extraData['privacyChange'])){
+             * @method - Validar tipo de checagem
+             */
+            if (!isset($extraData['privacyChange'])) {
                 /**
                  * @return mixed
                  */
                 $identifyFl = $this->FileLine($fileLine, $file, $extraData['newValue']);
-            }else{
+            } else {
                 /**
                  * @return mixed
                  */
                 $identifyFl = $this->FileLine($fileLine, $file, $extraData['newValue'], $extraData['passwordAtual'], $extraData['newPassword']);
             }
-            if(!is_bool($identifyFl)){
+            if (!is_bool($identifyFl)) {
                 // Lê o arquivo
                 $filename = file_get_contents($this::pathLinks);
                 if ($filename) {
                     $data = $this->linkArray;
-                    if($identifyFl["line0"] == 'link'){
+                    if ($identifyFl["line0"] == 'link') {
                         foreach ($data as $key => $entry) {
-                            if($key == $file){
+                            if ($key == $file) {
                                 $data[$key]["link"] = $identifyFl["line1"];
                             }
                         }
                     }
-                    if($identifyFl["line0"] == 'private'){
+                    if ($identifyFl["line0"] == 'private') {
                         // Verifica o tipo de mudança de privacidade do link
-                        if($identifyFl["line1"]){ // O usuario esta alterando o link para privado ou alterando a senha
+                        if ($identifyFl["line1"]) { // O usuario esta alterando o link para privado ou alterando a senha
                             // Verifica se ja existe alguma senha definida
-                            if(!$data[$file]["password"]){
+                            if (!$data[$file]["password"]) {
                                 foreach ($data as $key => $entry) {
-                                    if($key == $file){
+                                    if ($key == $file) {
                                         $data[$key]["private"] = 1;
                                         $data[$key]["password"] = $identifyFl["line3"];
                                     }
                                 }
-                            }else{ // O usuario precisa confirmar a senha informada
-                                if($identifyFl["line2"] == $data[$file]["password"]){
+                            } else { // O usuario precisa confirmar a senha informada
+                                if ($identifyFl["line2"] == $data[$file]["password"]) {
                                     foreach ($data as $key => $entry) {
-                                        if($key == $file){
+                                        if ($key == $file) {
                                             $data[$key]["private"] = 1;
                                             $data[$key]["password"] = $identifyFl["line3"];
                                         }
                                     }
-                                }else{
+                                } else {
                                     /**
                                      * @return array - A senha informada não confere
                                      */
@@ -133,16 +140,16 @@ class ChangeFile{
                                     ];
                                 }
                             }
-                        }else{ // O usuario esta retirando a privacidade do link
+                        } else { // O usuario esta retirando a privacidade do link
                             // O usuario precisa confirmar a senha informada
-                            if($identifyFl["line2"] == $data[$file]["password"]){
+                            if ($identifyFl["line2"] == $data[$file]["password"]) {
                                 foreach ($data as $key => $entry) {
-                                    if($key == $file){
+                                    if ($key == $file) {
                                         $data[$key]["private"] = 0;
                                         $data[$key]["password"] = 0;
                                     }
                                 }
-                            }else{
+                            } else {
                                 /**
                                  * @return array - A senha informada não confere
                                  */
@@ -154,26 +161,26 @@ class ChangeFile{
                             }
                         }
                     }
-                    if($identifyFl["line0"] == 'clicks'){
+                    if ($identifyFl["line0"] == 'clicks') {
                         foreach ($data as $key => $entry) {
-                            if($key == $file){
+                            if ($key == $file) {
                                 $data[$key]["clicks"] = $data[$key]["clicks"] + 1;
                             }
                         }
                     }
 
                     $newData = json_encode($data);
-                    
-                    if (!file_put_contents($this::pathLinks, $newData)) 
-                    /**
-                     * @return array - Não foi possiel atualizar valores no arquivo JSON
-                     */
-                    return [
-                        "status" => "error",
-                        "errorCode" => -14, // Falha ao atualizar valor em arquivo
-                        "response" => null // Manipular valor
-                    ];
-                }else{
+
+                    if (!file_put_contents($this::pathLinks, $newData))
+                        /**
+                         * @return array - Não foi possiel atualizar valores no arquivo JSON
+                         */
+                        return [
+                            "status" => "error",
+                            "errorCode" => -14, // Falha ao atualizar valor em arquivo
+                            "response" => null // Manipular valor
+                        ];
+                } else {
                     /**
                      * @return array - Não foi possivel abrir o arquivo
                      */
@@ -191,15 +198,14 @@ class ChangeFile{
                     "errorCode" => 0,
                     "response" => null // Manipular valor
                 ];
-    
-            }else{
+            } else {
                 /**
                  * @return bool - Valores inválidos
                  */
                 return false;
             }
         endif;
-        if($typeChange == 'newurl'):
+        if ($typeChange == 'newurl') :
             // Dados da nova URL a ser adicionada ao arquivo JSON
             $dataShort = [
                 $extraData["short"] => [
@@ -215,7 +221,7 @@ class ChangeFile{
             // Codificando para JSON
             $encodeArrays = json_encode($mergeArrays);
             // Edite o arquivo JSON com os novos dados
-            if(file_put_contents($this::pathLinks, $encodeArrays)){
+            if (file_put_contents($this::pathLinks, $encodeArrays)) {
                 /**
                  * @return array - Retorna os dados para manuseio
                  */
@@ -225,7 +231,7 @@ class ChangeFile{
                     "errorCode" => 0,
                     "response" => "URL encurtada com sucesso!"
                 ];
-            }else{
+            } else {
                 return [
                     "status" => "error",
                     "errorCode" => -14, // Falha ao atualizar valor em arquivo
@@ -237,20 +243,21 @@ class ChangeFile{
         return 0;
     }
 
-    public function updateLink(string $short_file, string $tipo_link, array $file_content){
+    public function updateLink(string $short_file, string $tipo_link, array $file_content)
+    {
         /**
          * @param mixed
          */
         $upResponse = $this->ChangeFileContent($short_file, $tipo_link, $file_content);
-        if(!is_bool($upResponse)){
+        if (!is_bool($upResponse)) {
             // Verifica condições
-            return $upResponse['status'] == "success" ? 
-            /**
-             * @return array
-             */
-            $upResponse : $upResponse ;
-        }else{
-            if(!$upResponse){
+            return $upResponse['status'] == "success" ?
+                /**
+                 * @return array
+                 */
+                $upResponse : $upResponse;
+        } else {
+            if (!$upResponse) {
                 /**
                  * @return array
                  */
@@ -263,20 +270,21 @@ class ChangeFile{
         }
     }
 
-    public function updateSecurity(string $short_file, array $file_content){
+    public function updateSecurity(string $short_file, array $file_content)
+    {
         /**
          * @param mixed
          */
         $upResponse = $this->ChangeFileContent($short_file, "private", $file_content);
-        if(!is_bool($upResponse)){
+        if (!is_bool($upResponse)) {
             // Verifica condições
-            return $upResponse['status'] == "success" ? 
-            /**
-             * @return array
-             */
-            $upResponse : $upResponse ;
-        }else{
-            if(!$upResponse){
+            return $upResponse['status'] == "success" ?
+                /**
+                 * @return array
+                 */
+                $upResponse : $upResponse;
+        } else {
+            if (!$upResponse) {
                 /**
                  * @return array
                  */
@@ -289,20 +297,21 @@ class ChangeFile{
         }
     }
 
-    public function updateClick(string $short_file, array $file_content){
+    public function updateClick(string $short_file, array $file_content)
+    {
         /**
          * @param mixed
          */
         $upResponse = $this->ChangeFileContent($short_file, "clicks", $file_content);
-        if(!is_bool($upResponse)){
+        if (!is_bool($upResponse)) {
             // Verifica condições
-            return $upResponse['status'] == "success" ? 
-            /**
-             * @return array
-             */
-            $upResponse : $upResponse ;
-        }else{
-            if(!$upResponse){
+            return $upResponse['status'] == "success" ?
+                /**
+                 * @return array
+                 */
+                $upResponse : $upResponse;
+        } else {
+            if (!$upResponse) {
                 /**
                  * @return array
                  */
@@ -315,20 +324,21 @@ class ChangeFile{
         }
     }
 
-    public function returndata(string $shortlink, array $datashort){
+    public function returndata(string $shortlink, array $datashort)
+    {
         /**
          * @param mixed
          */
         $upResponse = $this->ChangeFileContent($shortlink, "", $datashort, "newurl");
-        if(!is_bool($upResponse)){
+        if (!is_bool($upResponse)) {
             // Verifica condições
-            return $upResponse['status'] == "success" ? 
-            /**
-             * @return array
-             */
-            $upResponse : $upResponse ;
-        }else{
-            if(!$upResponse){
+            return $upResponse['status'] == "success" ?
+                /**
+                 * @return array
+                 */
+                $upResponse : $upResponse;
+        } else {
+            if (!$upResponse) {
                 /**
                  * @return array
                  */

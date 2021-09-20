@@ -17,12 +17,12 @@ $nFd = explode("/links.json", $paths::pathLinks);
 $nFd = $nFd[0];
 
 // Requisita a alteração da permissão da pasta de links:
-if(chmod($paths::pathLinks, 0760) && chmod($nFd, 0760)){
+if (chmod($paths::pathLinks, 0760) && chmod($nFd, 0760)) {
     $cdata = [];
-}else{
+} else {
     $localDebug ? $cdata = [
         "debug" => "chmod can't run"
-        ] : null;
+    ] : null;
 }
 header('Content-Type: application/json');
 die(json_encode([

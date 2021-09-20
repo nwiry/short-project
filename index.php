@@ -3,7 +3,7 @@
 /**
  * @method - Proibir o acesso direto ao index.php && followlinks
  */
-if($_SERVER['REQUEST_URI'] == $_SERVER['PHP_SELF']){
+if ($_SERVER['REQUEST_URI'] == $_SERVER['PHP_SELF']) {
     die(include('./layout/errors/404.html'));
 }
 
@@ -14,8 +14,10 @@ require_once('./vendor/autoload.php');
 /**
  * @package export
  */
+
 use Short\ShortProject\Router\Router;
 use Short\ShortProject\Operations\Operations;
+
 /**
  * @global object Router
  */
