@@ -75,47 +75,45 @@ class Validations extends Random
                     $this->random = parent::size($randChars)->get();
                     $existShort = $this->exist_short($this->random);
                 } while ($existShort == true); // Ira gerar outros caracteres enquanto a variação escolhida existir
-                // Cria o array com os dados do novo link
-                $newUrl = [
-                    $this->random => [
-                        "link" => $url,
-                        "user" => 0,
-                        "private" => 0,
-                        "password" => 0,
-                        "clicks" => 0
-                    ]
+                $createLink = [
+                    "status" => "success",
+                    "short" => $this->random,
+                    "shortUser" => 0,
+                    "shortPrivacy" => 0,
+                    "shortPass" => 0,
+                    "shortClicks" => 0,
                 ];
-                // Obtem o arquivo de links para leitura
-                $path = file_get_contents($this->changeFile::pathLinks);
-                // Transforma o resultado em array
-                $readJson = json_decode($path, true);
-                // Junta os novos dados em um só array
-                $addNewUrl = json_encode(array_merge($readJson, $newUrl));
-                // Solicita a chamada da função
-                $createLink = $this->changeFile->ChangeFile(
-                    $this->random, // Short
-                    "",
-                    [
-                        /**
-                         * @param array - Dados para uso na função
-                         */
-                        "short" => $this->random,
-                        "shortUser" => $newUrl[$this->random]["user"],
-                        "shortPrivacy" => $newUrl[$this->random]["private"],
-                        "shortPass" => $newUrl[$this->random]["password"],
-                        "shortClicks" => $newUrl[$this->random]["clicks"],
-                    ],
-                    "newurl" // Metodo
-                );
                 /**
-                 * @return mixed - Retorna o resultado para manuseio com API
+                 * @return array - Retorna o resultado para manuseio com API
                  */
                 return $createLink;
             } else {
-                // Tratar dados
+                $existShort = $this->exist_short($customShort);
+                // Se não existe um custom, prossiga
+                if (!$existShort) {
+                    $createLink = [
+                        "status" => "success",
+                        "short" => $customShort,
+                        "shortUser" => 0,
+                        "shortPrivacy" => 0,
+                        "shortPass" => 0,
+                        "shortClicks" => 0,
+                    ];
+                    return $createLink;
+                } else {
+                    return [
+                        "status" => 'error',
+                        "errorCode" => 30,
+                        "response" => 'O Custom informado já está em uso!',
+                    ];
+                }
             }
         } else {
-            // Tratar dados
+            return [
+                "status" => 'error',
+                "errorCode" => 35,
+                "response" => 'Informe um endereço de URL válido!!',
+            ];
         }
     }
 }
