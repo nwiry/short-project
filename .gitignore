@@ -1,0 +1,9 @@
+# Composer
+
+/vendor*
+*.lock*
+
+# Testes locais
+
+local.php
+tests/

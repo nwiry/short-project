@@ -1,0 +1,22 @@
+{
+    "name": "shortener/short-project",
+    "description": "URL Shortener Project",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "pragmarx/random": "^0.2.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "classmap": [
+            "system/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}
