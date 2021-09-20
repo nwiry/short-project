@@ -55,3 +55,5 @@ O sistema irá ignorar todos os avisos não críticos e tentar concluir todas as
 | -10 | error | normal | Falha ao abrir/criar arquivo |
 | null | warning | global | Erro ao realizar processo |
 | 0 | success | global | Processo concluido com sucesso |
+| 30 | error | normal | Custom em uso |
+| 35 | error | normal | URL Inválida |
