@@ -6,7 +6,17 @@
         "php": ">=7.4",
         "pragmarx/random": "^0.2.2"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
     "autoload": {
-        "classmap": ["system/"]
+        "classmap": [
+            "system/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     }
 }
